@@ -38,7 +38,7 @@ default_values = {
 
 # Load model and feature names
 def load_model():
-    model_path = 'models/RandomForest_best_model.pkl'
+    model_path = 'RandomForest_best_model.pkl'
     if os.path.exists(model_path):
         return joblib.load(model_path)
     st.error('Model file not found!')
@@ -71,7 +71,7 @@ if st.sidebar.button('Predict RMSD'):
     # Prepare input for model (polynomial features not handled here)
     input_df = pd.DataFrame([user_input])
     # Use the same scaling as in feature_engineering.py
-    train_df = pd.read_csv('data/protein_clean.csv')
+    train_df = pd.read_csv('protein_clean.csv')
     X_train = train_df[feature_names]
     scaler = StandardScaler()
     poly = PolynomialFeatures(degree=2, include_bias=False)
@@ -96,23 +96,3 @@ if st.sidebar.button('Predict RMSD'):
         #     st_shap(shap.getjs(force_html), height=300)
         # else:
         #     st.info('SHAP explainability is only available for tree-based models.')
-
-st.header('Dashboard')
-eda_dir = 'outputs/eda_visuals'
-if os.path.exists(eda_dir):
-    eda_imgs = [f for f in os.listdir(eda_dir) if f.endswith('.png')]
-    for img in sorted(eda_imgs):
-        st.subheader(img.replace('_', ' ').replace('.png', '').title())
-        st.image(os.path.join(eda_dir, img), use_container_width=True)
-
-st.header('Model Performance')
-perf_path = 'outputs/model_performance.csv'
-if os.path.exists(perf_path):
-    perf_df = pd.read_csv(perf_path, index_col=0)
-    st.dataframe(perf_df)
-
-st.header('Feature Importances')
-fi_path = 'outputs/feature_importance.csv'
-if os.path.exists(fi_path):
-    fi_df = pd.read_csv(fi_path)
-    st.dataframe(fi_df.head(20))
